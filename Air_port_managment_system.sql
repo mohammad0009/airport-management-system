@@ -77,7 +77,7 @@ INSERT INTO `department` (`department_num`, `location`, `manager_id`, `budget`) 
 (2, 'check in counter', 2110194, 40000.75000),
 (3, 'security points', 2110194, 65000.75000),
 (4, 'baggage claim', 2110194, 80000.75000),
-(5, 'resturents', 2110194, 12000.75000);
+(5, 'restaurants', 2110194, 12000.75000);
 
 -- --------------------------------------------------------
 
@@ -309,8 +309,8 @@ ALTER TABLE `employee`
 --
 ALTER TABLE `flight`
   ADD PRIMARY KEY (`flight_num`),
-  ADD KEY `‘flight_FK1’` (`plane_ID`),
-  ADD KEY `‘flight_FK2’` (`employee_ID`);
+  ADD KEY `flight_FK1` (`plane_ID`),
+  ADD KEY `flight_FK2` (`employee_ID`);
 
 --
 -- Indexes for table `passenger`
@@ -323,7 +323,7 @@ ALTER TABLE `passenger`
 --
 ALTER TABLE `passenger_flight`
   ADD PRIMARY KEY (`passenger_passportID`,`flight_flightNum`),
-  ADD KEY `‘passenger_flight_FK2’` (`flight_flightNum`);
+  ADD KEY `passenger_flight_FK2` (`flight_flightNum`);
 
 --
 -- Indexes for table `passenger_phonenumber`
@@ -344,6 +344,10 @@ ALTER TABLE `plane`
 --
 -- Constraints for table `employee`
 --
+-- Add FK for department.manager_id
+ALTER TABLE `department`
+  ADD CONSTRAINT `department_FK1` FOREIGN KEY (`manager_id`) REFERENCES `employee` (`id`);
+
 ALTER TABLE `employee`
   ADD CONSTRAINT `employee_FK1` FOREIGN KEY (`department_num`) REFERENCES `department` (`department_num`),
   ADD CONSTRAINT `employee_FK2` FOREIGN KEY (`manager_id`) REFERENCES `employee` (`id`);
@@ -352,16 +356,15 @@ ALTER TABLE `employee`
 -- Constraints for table `flight`
 --
 ALTER TABLE `flight`
-  ADD CONSTRAINT `‘flight_FK1’` FOREIGN KEY (`plane_ID`) REFERENCES `plane` (`plane_ID`),
-  ADD CONSTRAINT `‘flight_FK2’` FOREIGN KEY (`employee_ID`) REFERENCES `employee` (`id`);
+  ADD CONSTRAINT `flight_FK1` FOREIGN KEY (`plane_ID`) REFERENCES `plane` (`plane_ID`),
+  ADD CONSTRAINT `flight_FK2` FOREIGN KEY (`employee_ID`) REFERENCES `employee` (`id`);
 
 --
 -- Constraints for table `passenger_flight`
 --
 ALTER TABLE `passenger_flight`
-  ADD CONSTRAINT `passenger_flight_fk02` FOREIGN KEY (`passenger_passportID`) REFERENCES `passenger` (`passport_ID`),
-  ADD CONSTRAINT `‘passenger_flight_FK1’` FOREIGN KEY (`passenger_passportID`) REFERENCES `passenger` (`passport_ID`),
-  ADD CONSTRAINT `‘passenger_flight_FK2’` FOREIGN KEY (`flight_flightNum`) REFERENCES `flight` (`flight_num`);
+  ADD CONSTRAINT `passenger_flight_FK1` FOREIGN KEY (`passenger_passportID`) REFERENCES `passenger` (`passport_ID`),
+  ADD CONSTRAINT `passenger_flight_FK2` FOREIGN KEY (`flight_flightNum`) REFERENCES `flight` (`flight_num`);
 
 --
 -- Constraints for table `passenger_phonenumber`
